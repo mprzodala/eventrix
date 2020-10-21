@@ -182,7 +182,7 @@ import { withEventrix } from 'eventrix/react';
 
 class UsersList extends React.Component {
   removeUser = (user) => {
-    this.props.eventrix.emit('users:remove', user);
+    this.props.eventrix.emit('removeUser', user);
   }
   render() {
     const { users } = this.props;
@@ -190,7 +190,7 @@ class UsersList extends React.Component {
       <div>
         {users.map(user => 
           <div>
-            {user.name} <button onClick={() => this.removeUser(user)}></button>
+            {user.name} <button onClick={() => this.removeUser(user)}>remove user</button>
           </div>
         )}
       </div>
