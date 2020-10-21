@@ -292,7 +292,7 @@ import React from 'react';
 import Loader from './Loader';
 import { useEvent, useEventrixState } from 'eventrix/react';
 
-const UsersCounter = () => {
+const UsersList = () => {
   const [users] = useEventrixState('users');
   const [isLoading, setIsLoading]useState(false);
   useEvent('users:load', (eventData) => setIsLoading(true));
@@ -302,10 +302,37 @@ const UsersCounter = () => {
   }
   return (
     <div>
-      {users.length}
+      {users.map(user => 
+        <div>
+          {user.name}
+        </div>
+      )}
     </div>
   );
 }
 ```
-This example show us situation when we show loader when users are loading and remove loader when users will loaded success.
+This example showed us situation when we showing loader when users are loading and removing loader when users will loaded success.
 
+Sometime we need emit some events from components for this purpose Eventrix has `useEmit` hook that give you access to `eventrix.emit` method.
+```jsx
+import React from 'react';
+import Loader from './Loader';
+import { useEmit, useEventrixState } from 'eventrix/react';
+
+const UsersList = () => {
+  const [users] = useEventrixState('users');
+  const emit = useEmit();
+  if (isLoading) {
+    return <Loader />;
+  }
+  return (
+    <div>
+      {users.map(user => 
+        <div>
+          {user.name} <button onClick={() => emit('removeUser', user)}>remove user</button>
+        </div>
+      )}
+    </div>
+  );
+}
+```
