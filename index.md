@@ -7,6 +7,7 @@
 
 1. [Features](#features)
 1. [Installation](#installation)
+1. [Getting started](/eventrix/getting-started)
 1. [Eventrix](#eventrix)
 1. [React HOCs](#react-hocs)
 1. [React HOOKS](#react-hooks)
@@ -31,6 +32,11 @@
 ```bash
 $ npm install eventrix --save
 ```
+
+### Getting started
+
+
+[How to use eventrix step by step](https://mprzodala.github.io/eventrix/getting-started)
 
 ### Eventrix
 
