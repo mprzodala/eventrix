@@ -1,10 +1,10 @@
 # Getting Started with Eventrix
-Eventrix is events and state managing system that give you tools to connect your UI with JS bussines logic. 
-Component can send events to another components or JS bussines logic thath give you posibility to send some XHR to get data from server. 
+Eventrix is events and state management system which gives you tools to connect your UI with JS bussines logic. 
+Component can send events to another components or JS bussines logic which give you posibility to send some XHR to get data from server. 
 Eventrix also give you posibility to store some data in eventrix state. You can share this state with Your components and JS bussines logic part.
 
-### Manage events
-Eventrix class instance is something like store in Redux but no the same.
+### Events management
+Eventrix class instance is something like store in Redux but not the same.
 ```js
 import { Eventrix } from 'eventrix';
 
@@ -13,7 +13,7 @@ const eventsReceiver = [];
 
 const eventrix = new Eventrix(initialState, eventsReceiver);
 ```
-Eventrix class receive initial state and events receivers to handle events and do someting with event data.
+Eventrix class receive initial state and events receivers to handle events and to do someting with event data.
 Eventrix instance has events managament system and state manager inside. When You emit some event by
 
 ```js
@@ -28,8 +28,8 @@ eventrix.listen('fooEvent', fooListener);
 eventrix.emit('fooEvent', { foo: 'Some text' });
 // after call emit fooListener will be called with { title: 'Some title' } as eventData
 ```
-### Manage state
-Ok now we know how to listen on events and emit events but what about state? Where he is? If we want change state we need use events receiver
+### State management
+Now we know how to listen on events and emit events. But what about state? Where is it? If we want to change state, we need to use events receiver
 ```js
 import { EventsReceiver } from 'eventrix';
 
@@ -42,7 +42,7 @@ const fooReceiver = new EventsReceiver('fooEvent', (eventName, eventData, stateM
 
 eventrix.useReceiver(fooReceiver);
 ```
-If you use `EventsReceiver` in eventrix instance it will get access to stateManager when event will be called. State manager can set new state or get any state that you need.
+If you use `EventsReceiver` in eventrix instance, it will get access to stateManager when event will be called. State manager can set new state or get any state which you need.
 
 Eventrix has one default events receiver on event `setState`. When you emit this event with
 
@@ -62,7 +62,7 @@ eventrix.emit('setState', { stateName: 'foo', value: { foo: 'new title' } });
 ```
 
 ### Fetch with Eventrix
-If you want use `fetch` or `axios` with eventrix you can do this by EventsReceiver and emit
+If you want to use `fetch` or `axios` with eventrix you can do this with EventsReceiver and emit
 ```js
 import { EventsReceiver } from 'eventrix';
 import axios from 'axios';
@@ -83,7 +83,7 @@ eventrix.useReceiver(fetchReceiver);
 eventrix.emit('fetchUsers', { search: 'johny' });
 // after emit `fetchUsers` event `fetchReceiver` will get users data from server and put it to `users` state
 ```
-When you want fetch some data and put it to state you can also use special helper funcion called `fetchToStateReceiver`
+When you want to fetch some data and put it to state, you can also use special helper function called `fetchToStateReceiver`
 ```js
 import { fetchToStateReceiver } from 'eventrix';
 import axios from 'axios';
@@ -103,7 +103,7 @@ eventrix.useReceiver(fetchReceiver);
 
 eventrix.emit('fetchUsers', { search: 'johny' });
 ```
-Hmmm what is the different ? You define state path and promiss must return new state. Look on more complex example with users manage class.
+Hmmm what is the difference ? You define state path and promise must return new state. Take a look on more complex example with users manage class.
 ```js
 import { fetchToStateReceiver } from 'eventrix';
 
@@ -137,7 +137,7 @@ class usersService {
 }
 ```
 ### React
-Now we know how send events, manage state and send requests to server with Eventrix. What about React and component? Eventrix has `react` section that give us react context, provider, hocs and hooks.
+Now we know how to send events, manage state and send requests to server with Eventrix. What about React and components? Eventrix has `react` section which gives us react context, provider, hocs and hooks.
 ```js
 import {
 // react context stuff
@@ -154,7 +154,7 @@ useEventState,
 useFetchToState
 } from 'eventrix/react';
 ```
-If you want use Eventrix in Your react project you must use `EventrixProvider` on top of project components tree.
+If you want to use Eventrix in Your react project you must use `EventrixProvider` on the top of the project components tree.
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
@@ -172,10 +172,10 @@ ReactDOM.render(
 );
 
 ```
-When we have EventrixProvider all of HOCs and hooks can be used in project
+When we have EventrixProvider all of HOCs and hooks can be used in project.
 
 ### HOCs
-Eventrix has two HOCs `withEventrix` and `withEventrixState`. First HOC pass eventrix instance to props and You can do what you need it with eventrix
+Eventrix has two HOCs `withEventrix` and `withEventrixState`. First HOC pass eventrix instance to props.
 ```jsx
 import React from 'react';
 import { withEventrix } from 'eventrix/react';
@@ -222,11 +222,11 @@ class UsersList extends React.Component {
 
 export default withEventrixState(UsersList, ['users']);
 ```
-If you want change props for state You can use third argument `mapStateToProps` and change name of props or map state structure before go to props.
+If you want to map state to props You can use third argument `mapStateToProps`.
 ```jsx
 export default withEventrixState(UsersList, ['users'], (state, props) => { usersList: state.users });
 ```
-What can I do when I need data from props to define `stateNames`? You can pass function as second argument.
+What can I do when I need data from props to define `stateNames`? You can pass function as a second argument.
 ```jsx
 export default withEventrixState(
   UsersDetails,
@@ -235,7 +235,7 @@ export default withEventrixState(
 );
 ```
 ### Hooks
-Eventrix give us special react hooks for manage state and events. For example if You want rerender component when some state will change you can use `useEventrixState` hook.
+Eventrix gives us special react hooks for state and events management. For example if You want to rerender component when some state will be changed, you can use `useEventrixState` hook.
 ```jsx
 import React from 'react';
 import { useEventrixState } from 'eventrix/react';
@@ -253,9 +253,9 @@ const UsersList = () => {
   );
 }
 ```
-`useEventrixState` hook also give you posibility to update used state. This hook is similar to `useState` but dont have initial value. Remember this is eventrix state and you can share this state with other component in Your app.
+`useEventrixState` hook also give you posibility to update used state. This hook is similar to `useState` but don't have initial value. Remember, this is eventrix state and you can share this state with other component in Your app.
 
-This two component use the same state
+These two components use the same state
 ```jsx
 import React from 'react';
 import { useEventrixState } from 'eventrix/react';
@@ -286,7 +286,7 @@ const UsersCounter = () => {
   );
 }
 ```
-When we need listen on some event and do some action we can use `useEvent` hook.
+When we need to listen on some event and do some action, we can use `useEvent` hook.
 ```jsx
 import React from 'react';
 import Loader from './Loader';
@@ -311,9 +311,11 @@ const UsersList = () => {
   );
 }
 ```
-This example showed us situation when we showing loader when users are loading and removing loader when users will loaded success.
+This example showed us two situations: 
+- displaying loader when users list is loading
+- removing loader when users list is loaded successfully.
 
-Sometime we need emit some events from components for this purpose Eventrix has `useEmit` hook that give you access to `eventrix.emit` method.
+Sometimes we need to emit some events from components. For this purpose Eventrix has `useEmit` hook that gives you access to `eventrix.emit` method.
 ```jsx
 import React from 'react';
 import Loader from './Loader';
