@@ -88,14 +88,14 @@ When you want to fetch some data and put it to state, you can also use special h
 import { fetchToStateReceiver } from 'eventrix';
 import axios from 'axios';
 
-const fetchReceiver = fetchToStateReceiver('fetchUsers', 'users', (eventData, eventrixState) => {
+const fetchReceiver = fetchToStateReceiver('fetchUsers', 'users', (eventData, eventrixState, emit) => {
   return axios.get(https://somedomain.com/users, { params: eventData })
               .then((users) => {
-                eventrix.emit('fetchUsers.success', users);
+                emit('fetchUsers.success', users);
                 return users
               })
               .catch((error) => {
-                eventrix.emit('fetchUsers.error', error);
+                emit('fetchUsers.error', error);
               });
 });
 
@@ -118,24 +118,76 @@ class usersService {
     this.eventrix.useReceiver(fetchToStateReceiver('users:getUsers', 'users', this.getUsers));
     this.eventrix.useReceiver(fetchToStateReceiver('users:create', 'users', this.create));
   }
-  getUsers(filters) {
+  getUsers(filters, state, emit) {
     return axios.get('https://somedomain.com/users', { params: filters })
                 .then(({ data }) => {
-                  this.eventrix.emit('users:getUsers.success', data.users);
+                  emit('users:getUsers.success', data.users);
                   return data.users
                 })
-                .catch(error => this.eventrix.emit('users:getUsers.error', error));
+                .catch(error => emit('users:getUsers.error', error));
   }
-  create(user, state) {
+  create(user, state, emit) {
     return axios.post('https://somedomain.com/users', user)
                 .then(({ data }) => {
-                  this.eventrix.emit('users:create.success', data);
+                  emit('users:create.success', data);
                   return [data, ...state.users];
                 })
-                .catch(error => this.eventrix.emit('users:getUsers.error', error));
+                .catch(error => emit('users:getUsers.error', error));
   }
 }
 ```
+### Fetch error handling with Eventrix
+You can handle error using `catch` on promise as we do in [fetch with eventrix](#fetch-with-eventrix) section or use fetchHandler. Fetch handler is small midlerware for fetch method that emit events when fetch success or fetch error.
+
+```js
+import { fetchToStateReceiver, fetchHandler } from 'eventrix';
+import axios from 'axios';
+
+const fetchUsersMethod = (eventData, eventrixState, emit) => {
+  return axios.get(https://somedomain.com/users, { params: eventData })
+              .then((users) => {
+                emit('fetchUsers.success', users);
+                return users
+              })
+              .catch((error) => {
+                emit('fetchUsers.error', error);
+              });
+};
+
+const fetchUserMethodWithHandler = fetchHandler(
+  fetchUsersMethod,
+  {
+    success: {
+      eventName: 'fetchUsers.success',
+      data: 'Users list loaded',
+    },
+    error: {
+      eventName: 'fetchUsers.failed',
+      data: 'Users list load failed',
+    },
+  }
+);
+
+const fetchReceiver = fetchToStateReceiver('fetchUsers', 'users', fetchUserMethodWithHandler);
+
+eventrix.useReceiver(fetchReceiver);
+
+eventrix.emit('fetchUsers', { search: 'johny' });
+```
+If you want create event data basing on response, error, or receiver event data you can use `getData` attribute on success and error.
+```js
+{
+    success: {
+      eventName: 'fetchUsers.success',
+      getData: (response, eventData) => `Users list loaded with resoults for "${eventData.search}"`,
+    },
+    error: {
+      eventName: 'fetchUsers.failed',
+      getData: (error, eventData) => `Users list load failed when search "${eventData.search}"`,
+    },
+}
+```
+
 ### React
 Now we know how to send events, manage state and send requests to server with Eventrix. What about React and components? Eventrix has `react` section which gives us react context, provider, hocs and hooks.
 ```js
