@@ -14,7 +14,9 @@
     "coverage": "jest --coverage",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint -c .eslintrc.json **/*.js? --ignore-path .gitignore",
-    "lint:fix": "eslint --fix -c .eslintrc.json **/*.js? --ignore-path .gitignore"
+    "lint:fix": "eslint --fix -c .eslintrc.json **/*.js? --ignore-path .gitignore",
+    "generate:documentation": "sh 'generateDocs.sh'",
+    "docs": "jsdoc2md"
   },
   "pre-commit": [
     "lint",
@@ -58,6 +60,8 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "7.13.0",
     "jest": "^24.9.0",
+    "jsdoc": "^3.6.6",
+    "jsdoc-to-markdown": "^6.0.1",
     "pre-commit": "^1.2.2",
     "react-proptypes": "^1.0.0",
     "webpack": "^4.41.2",

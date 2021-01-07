@@ -4,6 +4,12 @@ import { isPromise } from "./helpers";
 import EventsReceiver from './EventsReceiver';
 
 class StateManager {
+    /**
+     *
+     * @param eventsEmitter {EventsEmitter} EventsEmitter instance
+     * @param initialState {object} Initial state of state manager
+     * @param eventsReceivers {Array<EventsReceiver>} Initial events receivers
+     */
     constructor(eventsEmitter, initialState, eventsReceivers) {
         this.eventsEmitter = eventsEmitter;
         this.state = initialState || {};
@@ -20,6 +26,10 @@ class StateManager {
         }));
     }
 
+    /**
+     *
+     * @param receiver {EventsReceiver}
+     */
     useReceiver(receiver) {
         const eventsNames = receiver.getEventsNames();
         eventsNames.forEach(
@@ -27,6 +37,10 @@ class StateManager {
         );
     }
 
+    /**
+     *
+     * @param receiver {EventsReceiver}
+     */
     removeReceiver(receiver) {
         const eventsNames = receiver.getEventsNames();
         eventsNames.forEach(
@@ -34,6 +48,11 @@ class StateManager {
         );
     }
 
+    /**
+     *
+     * @param name {string} Event name
+     * @param receiver
+     */
     registerReceiver(name, receiver) {
         if (!this.receivers[name]) {
             this.receivers[name] = [];
