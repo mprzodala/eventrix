@@ -150,7 +150,10 @@ export interface EventsEmitterI {
     listeners: {
         [key: string]: EventsListenerI<any>[];
     };
+    errorCallbacks: Set<ErrorCallback>;
     stateManager?: StateManagerI;
+    onError(errorCallback: ErrorCallback): void;
+    handleError(error: Error, eventName: string, eventData: any, state: any): void;
     emit<EventDataI = any>(eventName: string, eventData?: EventDataI): Promise<any>;
     emitWild<EventDataI = any>(eventName: string, eventData: EventDataI): void;
     listen(eventName: string, listener: EventsListenerI<any>): void;
@@ -159,6 +162,7 @@ export interface EventsEmitterI {
     runListeners<EventDataI>(name: string, data: EventDataI, receiversData: any[]): void;
     emitWild<EventDataI>(name: string, data: EventDataI): void
     useStore(stateManager: StateManagerI): void;
+    onError(errorCallback: ErrorCallback): void;
 }
 
 export interface FetchHandlersI<DataI = any, ResponseI = any, EventDataI = any> {
@@ -231,4 +235,8 @@ export interface mapDispatchToPropsResponseType {
 
 export interface mapDispatchToPropsType <StateI = any, ReducedStateI = any>{
     (dispatch: DispatchI): mapDispatchToPropsResponseType;
+}
+
+export interface ErrorCallback<StateI = any> {
+    (error: Error, eventName: string, eventData: any, state: StateI): void;
 }

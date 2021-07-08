@@ -6,7 +6,8 @@ import {
     StateManagerI,
     EventsListenerI,
     EventsReceiverI,
-    EmitArgumentsI
+    EmitArgumentsI,
+    ErrorCallback,
 } from "./interfaces";
 
 class Eventrix<InitialStateI = any> implements EventrixI {
@@ -23,8 +24,9 @@ class Eventrix<InitialStateI = any> implements EventrixI {
         this.unlisten = this.unlisten.bind(this);
         this.useReceiver = this.useReceiver.bind(this);
         this.removeReceiver = this.removeReceiver.bind(this);
+        this.onError = this.onError.bind(this);
     }
-    getState<StateI>(path: string): StateI {
+    getState<StateI>(path?: string): StateI {
         return this.stateManager.getState(path);
     }
     mapEmitArguments<EventDataI>(name: string | [string, EventDataI], value?: EventDataI): EmitArgumentsI<EventDataI> {
@@ -49,6 +51,9 @@ class Eventrix<InitialStateI = any> implements EventrixI {
     }
     removeReceiver(receiver: EventsReceiverI): void {
         this.stateManager.removeReceiver(receiver);
+    }
+    onError(errorCallback: ErrorCallback<InitialStateI>) {
+        this.eventsEmitter.onError(errorCallback);
     }
 }
 
